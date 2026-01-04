@@ -1,2 +1,98 @@
-/UNI/**
-__pychache__/
+# ## General ignores ##
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor settings
+.idea/
+.vscode/
+*.swp
+*~
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+build/
+dist/
+*.egg-info/
+venv/
+env/
+.env
+
+# ## Project specific ignores ##
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Large data files, datasets, and embeddings
+*/svs
+*.npy
+*.npdi
+*.pkl
+*.csv
+*.html
+*.zip
+*.tar.gz
+*.h5
+output.csv
+
+# not related dir
+seg_patch_result/
+Reference_data/
+UNI/
+CONCH/
+Enbedding_TCGA/
+get_tumor_info/
+paper_prep/
+learned_model/
+SSL_learned_model/
+CLAM/models/
+CLAM/heatmaps/
+CONCH/checkpoints/
+
+# WSI patches and segmentation results
+ICGC_wsi_patch/
+ST_wsi_patch/
+TCGA_wsi_patch/
+!TCGA_wsi_patch/patched_STAD_mag40
+!TCGA_wsi_patch/exec_patching.txt
+!TCGA_wsi_patch/make_files_for_patch.ipynb
+!TCGA_wsi_patch/samples_mag_40.txt
+!TCGA_wsi_patch/samples_mag40_STAD
+
+# Encoded features and intermediate files
+ICGC_encode_with_mask/
+ICGC_encode_wo_mask/
+ST_encode_with_mask/
+/UNI_encode_with_mask/
+/UNI_encode_wo_mask/
+!/UNI_encode_with_mask/samples_to_encode.txt
+!/UNI_encode_with_mask/UNI_embedding.py
+!/UNI_encode_with_mask/encode_all.sh
+!/UNI_encode_with_mask/samples_to_encode_mag40.txt
+!/UNI_encode_wiith_mask/features_STAD_mag40/
+!UNI_encode_wo_mask/UNI_embedding_womask.py
+!UNI_encode_wo_mask/encode_all.sh
+!UNI_encode_wo_mask/samples_to_encode_mag40.txt
+!UNI_encode_wo_mask/features_STAD_mag40_womask/
+
+# Clustering results
+hetero_cluster/
+!hetero_cluster/func/
+!hetero_cluster/cluster_all.sh
+!hetero_cluster/samples_to_cluster.txt
+!hetero_cluster/prog_est_clonenum_corr_chiefall_STAD_tot.ipynb
+!hetero_cluster/histrogy_analysis_ICGC.ipynb
+
+# important files
+ST_analysis/
+hetero_cluster/prog_data/*
+
+# Miscellaneous
+get_seg_patch.sh
+SSL_UNI_terminal.py
+/*.ipynb
+slurm-*.out
+
