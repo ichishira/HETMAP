@@ -27,9 +27,10 @@ env/
 .ipynb_checkpoints/
 
 # Large data files, datasets, and embeddings
-*/svs
+*.svs
 *.npy
-*.npdi
+*.ndpi
+*.jpg
 *.pkl
 *.csv
 *.html
@@ -55,7 +56,7 @@ CONCH/checkpoints/
 # WSI patches and segmentation results
 ICGC_wsi_patch/
 ST_wsi_patch/
-TCGA_wsi_patch/
+TCGA_wsi_patch/*
 !TCGA_wsi_patch/patched_STAD_mag40
 !TCGA_wsi_patch/exec_patching.txt
 !TCGA_wsi_patch/make_files_for_patch.ipynb
@@ -66,8 +67,8 @@ TCGA_wsi_patch/
 ICGC_encode_with_mask/
 ICGC_encode_wo_mask/
 ST_encode_with_mask/
-/UNI_encode_with_mask/
-/UNI_encode_wo_mask/
+/UNI_encode_with_mask/*
+/UNI_encode_wo_mask/*
 !/UNI_encode_with_mask/samples_to_encode.txt
 !/UNI_encode_with_mask/UNI_embedding.py
 !/UNI_encode_with_mask/encode_all.sh
@@ -79,8 +80,10 @@ ST_encode_with_mask/
 !UNI_encode_wo_mask/features_STAD_mag40_womask/
 
 # Clustering results
-hetero_cluster/
+hetero_cluster/*
 !hetero_cluster/func/
+!hetero_cluster/hetero_cluster.py
+!hetero_cluster/hetero_cluster_wopotts.py
 !hetero_cluster/cluster_all.sh
 !hetero_cluster/samples_to_cluster.txt
 !hetero_cluster/prog_est_clonenum_corr_chiefall_STAD_tot.ipynb
