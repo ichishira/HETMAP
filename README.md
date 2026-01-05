@@ -11,7 +11,6 @@ By enabling cost-effective and scalable quantification of ITH from routinely ava
 
 ![Graphical Abstract](graphical_abstract.png)
 
-*(Note: For the image to display correctly, please convert `graphical_abstract.pdf` to `graphical_abstract.png` and place it in the root directory.)*
 
 ## Workflow
 
