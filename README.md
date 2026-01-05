@@ -14,18 +14,27 @@ By enabling cost-effective and scalable quantification of ITH from routinely ava
 
 ## Workflow
 
-The workflow consists of the following three steps.
+The workflow consists of the following three steps, each with its expected directory structure for inputs and outputs.
 
 ### 1. Patch Extraction from WSIs
 
-This step extracts patches from WSIs while maintaining a consistent magnification.
+This step extracts smaller image patches from the large WSI files at a consistent magnification.
 
 - **Directory:** `TCGA_wsi_patch/`
 - **Process:**
-    1.  The `make_files_for_patch.ipynb` notebook reads the magnification level from the slides and creates text files listing the samples to be processed. Patches are extracted at a size of 224x224 pixels for 20x samples and 448x448 pixels for 40x samples.
-    2.  Execute the patching script from the `CLAM` repository. The `--patch_size` should be adjusted based on the slide's magnification.
+    1.  The `make_files_for_patch.ipynb` notebook reads slide information to generate lists of samples to process.
+    2.  The `create_patches_fp.py` script from the `CLAM` repository is used for patch extraction.
 
-- **Example Command:**
+- **Example Directory Structure & Command:**
+
+  - **Input:** A directory containing your WSI files.
+    ```
+    /path/to/wsi_slides/
+    ├── sample_A.svs
+    └── sample_B.svs
+    ```
+
+  - **Command:** The `--patch_size` should be adjusted based on the slide's magnification (e.g., 224 for 20x, 448 for 40x).
     ```bash
     python ../CLAM/create_patches_fp.py \
         --source /path/to/wsi_slides/ \
@@ -34,32 +43,67 @@ This step extracts patches from WSIs while maintaining a consistent magnificatio
         --seg --patch --stitch
     ```
 
+  - **Output:** The script will generate a directory containing `.h5` files with patch coordinates.
+    ```
+    /path/to/output_patches/
+    └── patches/
+        ├── sample_A.h5
+        └── sample_B.h5
+    ```
+
 ### 2. Embedding with UNI
 
-This step generates feature embeddings for the extracted patches using the UNI model.
+This step generates a feature vector (embedding) for each patch using the UNI pathology foundation model.
 
-- **Directory:** `UNI_encode_with_mask/` (or `UNI_encode_wo_mask/` for ablation studies)
+- **Directory:** `UNI_encode_with_mask/` (or `UNI_encode_wo_mask/`)
 - **Process:**
-    1.  Only patches where at least 1/4 of the area consists of epithelial components are encoded.
-    2.  List the paths to the samples you wish to encode in a file named `samples_to_encode.txt`.
-    3.  Run the `encode_all.sh` script to generate embeddings for all specified samples.
+    1.  Create a file named `samples_to_encode.txt` listing the paths to the patch `.h5` files you want to process.
+    2.  Run the `encode_all.sh` script to generate embeddings.
 
-- **Example Command:**
+- **Example Directory Structure & Command:**
+
+  - **Input:** The directory containing the `encode_all.sh` script and a text file listing samples.
+    ```
+    UNI_encode_with_mask/
+    ├── samples_to_encode.txt
+    ├── encode_all.sh
+    └── UNI_embedding.py
+    ```
+
+  - **Command:**
     ```bash
     cd UNI_encode_with_mask/
     ./encode_all.sh
     ```
 
+  - **Output:** The script creates a `features` directory containing the embeddings for each sample.
+    ```
+    UNI_encode_with_mask/
+    └── features/
+        ├── sample_A/
+        │   ├── features.npy
+        │   └── coords.npy
+        └── sample_B/
+            ...
+    ```
+
 ### 3. Patch Clustering with HETMAP
 
-This step clusters the patch embeddings to identify and analyze tumor heterogeneity.
+The final step clusters the patch embeddings to identify and visualize spatially distinct, heterogeneous regions.
 
 - **Directory:** `hetero_cluster/`
 - **Process:**
-    1.  The main clustering logic is handled by `hetero_cluster.py`.
-    2.  To run clustering for multiple samples in parallel, you can adapt the `cluster_all.sh` script.
+    1.  The main clustering logic is in `hetero_cluster.py`.
+    2.  To run on multiple samples, adapt the `cluster_all.sh` script.
 
-- **Example Command (for a single sample):**
+- **Example Directory Structure & Command:**
+
+  - **Input:** Paths to directories containing slides, patches, and features are provided as arguments.
+    - `-slidedir /path/to/your/slides/`
+    - `-h5dir /path/to/h5/patches/`
+    - `-featuredir /path/to/encoded/features/`
+
+  - **Command (for a single sample):**
     ```bash
     python ./hetero_cluster/hetero_cluster.py \
         -slidedir /path/to/your/slides/ \
@@ -70,6 +114,15 @@ This step clusters the patch embeddings to identify and analyze tumor heterogene
         -savedir output_clustering_results \
         -seed 314
     ```
+  - **Output:** A directory containing clustering results and visualizations for each sample.
+    ```
+    output_clustering_results/
+    └── YOUR_SAMPLE_ID/
+        ├── optimized_state.npy
+        ├── clustering_optimized.png
+        └── he.png
+    ```
+
 - **Downstream Analysis:**
 
   - **Correlation with Prognosis:** The `prog_est_clonenum_corr_chief_all_STAD_tot.ipynb` notebook provides an example of how to correlate the HETMAP heterogeneity metric with clinical outcomes.
