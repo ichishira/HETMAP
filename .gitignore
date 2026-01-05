@@ -96,6 +96,7 @@ hetero_cluster/prog_data/*
 # Miscellaneous
 get_seg_patch.sh
 SSL_UNI_terminal.py
+!graphical_abstract.png
 /*.ipynb
 slurm-*.out
 
